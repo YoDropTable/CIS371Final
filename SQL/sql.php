@@ -4,8 +4,8 @@
     $dbConn=mysqli_connect("localhost:6306","student8","pass8","student8");
     $testDB=mysqli_connect("localhost:6306","read","read","world");
 
-    function sql_getComments($assigmentID){
-        $myCmd = "select * from ourAssignments where assignmentID = '{$assignmentID}";
+    function getComments($assignmentID){
+        $myCmd = "select * from ourAssignments where assignmentID = '$assignmentID';";
         global $dbConn;
         return mysqli_query($dbConn, $myCmd);
     }
@@ -25,7 +25,7 @@
     }
 
     function getRating($assig){
-        global $dbCconn;
+        global $dbConn;
         $query = "select rating,count(*) from ourAssignments where assignmentID = '$assig' GROUP BY rating;";
         return mysqli_query($dbConn, $query);
 

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rate an Assignment</title>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="./css/myCSS.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
@@ -132,23 +133,30 @@ echo "<script src='https://cis371.ddns.net:9040/assignment1/utils.js'></script>"
         {
                 continue;
         } else {
+
+            $values = array(0,0,0,0,0,0,0);
+            $ratingResult = getRating($row->id);
+            while($grow=mysqli_fetch_array($ratingResult)){
+                 $values[$grow[0]] = $grow[1];
+            }
+
+
+
                 echo "<h3>" . $row->name . "</h3>";
-                echo "<div><h4>Assignment ID: " . $row->id . "</h4>"; ?>
-        <?PHP echo "<div id='canvas-holder" . $i . "' style='width:18%'>";
+                echo "<div><h4>Assignment: " . $row->name . "</h4>"; ?>
+        <?PHP echo "<div id='canvas-holder" . $i . "' style='width:25%'>";
            echo "<canvas id='chart-area" . $i . "'></canvas>"; ?>
         </div>
+
         <script>
+
+
+
             <?PHP echo "var config" . $i . " = {"; ?>
                 type: 'pie',
                 data: {
                     datasets: [{
-                        data: [
-                            1,
-                            2,
-			    3,
-			    4,
-			    5,
-                        ],
+                        data: [<?php  echo $values[1].",".$values[2].",".$values[3].",".$values[4].",".$values[5].",";?>],
                         backgroundColor: [
                             window.chartColors.red,
                             window.chartColors.orange,
@@ -178,6 +186,13 @@ echo "<script src='https://cis371.ddns.net:9040/assignment1/utils.js'></script>"
             var colorNames = Object.keys(window.chartColors);
         </script>
        <?PHP
+        $notes = getComments($row->id);
+        echo "<table border=1 cellpadding=10>";
+        echo "<tr><th>Student Name</th><th>Comment</th></tr>";
+        while($grow=mysqli_fetch_array($notes)){
+            echo "<tr><td>".$grow[studentID]."</td><td>".$grow[notes]."</td></tr>";
+        }
+        echo "</table>";
 		$i++;
 		echo "</div>";
 	    }
